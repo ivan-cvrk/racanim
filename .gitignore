@@ -1,0 +1,7 @@
+[Bb]uild/
+compile_commands.json
+.cache/
+cmake_install.cmake
+CMakeFiles
+Makefile
+CMakeCache.txt
