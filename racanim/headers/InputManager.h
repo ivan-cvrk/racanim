@@ -1,7 +1,6 @@
 #pragma once
 #include "IMoveable.h"
 #include <GLFW/glfw3.h>
-#include <list>
 
 namespace InputManager {
 

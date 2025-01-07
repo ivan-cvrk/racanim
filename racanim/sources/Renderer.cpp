@@ -9,7 +9,7 @@ Renderer::Renderer(Camera &camera, Light &light, Shader* depthShader)
   glGenTextures(1, &depthMapTEX);
   glBindTexture(GL_TEXTURE_2D, depthMapTEX);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH,
@@ -28,9 +28,10 @@ void Renderer::render() {
   glm::mat4 projectionMatrix = this->camera.getProjectionMatrix();
   glm::mat4 viewMatrix = this->camera.getViewMatrix();
 
-  float near = 1.0f, far = 7.5f;
-  glm::mat4 lightProjection =
-      glm::ortho(-5.0f, 5.0f, -5.0f, 5.0f, near, far);
+  float zNear = 1.0f, zFar = 20.0f;
+  const float fH = tan(light.getOuterCutoff()) * zNear;
+  const float fW = fH;
+  glm::mat4 lightProjection = MyGLM::frustum(-fW, fW, -fH, fH, zNear, zFar);
   glm::mat4 lightView = light.getViewMatrix();
   glm::mat4 lightSpace = lightProjection * lightView;
 
@@ -71,4 +72,9 @@ void Renderer::render() {
   }
 }
 
-void Renderer::update(float deltaTime) {}
+void Renderer::update(float deltaTime) {
+  for (auto sceneObject : this->objects) {
+    sceneObject->update(deltaTime);
+  }
+}
+ 

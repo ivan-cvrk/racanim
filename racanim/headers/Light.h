@@ -13,6 +13,14 @@ class Light : public Transform {
 
 public:
   Light(const glm::vec3 &ambientIntensity, const glm::vec3 &diffuseIntensity,
-        const glm::vec3 &specularIntensity, float cutoff = -1, float outerCutoff = -1);
+        const glm::vec3 &specularIntensity, float cutoff = 180, float outerCutoff = 180);
   void initializeUniforms(GLuint shaderID);
+
+  inline float getOuterCutoff() {
+    return this->outerCutoff;
+  }
+
+  inline float getInnerCutoff() {
+    return this->cutoff;
+  }
 };

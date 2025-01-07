@@ -37,4 +37,6 @@ public:
   void render(const glm::mat4 &projectionMatrix,
               const glm::mat4 &viewMatrix,
               const glm::mat4& parentModel) override;
+
+  void update(float deltaTime) override;
 };

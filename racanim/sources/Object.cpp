@@ -34,6 +34,12 @@ void Object::render(const glm::mat4 &projectionMatrix, const glm::mat4 &view, co
   }
 }
 
+void Object::update(float deltaTime) {
+  for (IRenderable* renderable : renderables) {
+    renderable->update(deltaTime);
+  }
+}
+
 Object::~Object() {
   for (IRenderable* renderable : renderables) {
     delete renderable;

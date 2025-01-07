@@ -7,8 +7,8 @@ Light::Light(const glm::vec3 &ambientIntensity,
   this->ambientIntensity = ambientIntensity;
   this->diffuseIntensity = diffuseIntensity;
   this->specularIntensity = specularIntensity;
-  this->cutoff = cos(glm::radians(cutoff));
-  this->outerCutoff = cos(glm::radians(outerCutoff));
+  this->cutoff = glm::radians(cutoff);
+  this->outerCutoff = glm::radians(outerCutoff);
 }
 
 void Light::initializeUniforms(GLuint shaderID) {
@@ -24,6 +24,6 @@ void Light::initializeUniforms(GLuint shaderID) {
   const glm::vec3 &lightDirection = FrontVec();
   glUniform3f(glGetUniformLocation(shaderID, "LightDirection"),
               lightDirection.x, lightDirection.y, lightDirection.z);
-  glUniform1f(glGetUniformLocation(shaderID, "LightCutoff"), cutoff);
-  glUniform1f(glGetUniformLocation(shaderID, "LightOuterCutoff"), outerCutoff);
+  glUniform1f(glGetUniformLocation(shaderID, "LightCutoff"), cos(cutoff));
+  glUniform1f(glGetUniformLocation(shaderID, "LightOuterCutoff"), cos(outerCutoff));
 }

@@ -12,4 +12,5 @@ public:
   virtual void render(const glm::mat4 &projectionMatrix,
                       const glm::mat4 &viewMatrix,
                       const glm::mat4 &parentModel = glm::mat4{1}) = 0;
+  virtual void update([[maybe_unused]] float deltaTime) {}
 };
