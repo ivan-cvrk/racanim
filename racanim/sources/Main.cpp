@@ -9,7 +9,8 @@
 #include "ResourceManager.h"
 #include "Shader.h"
 #include "TraversableSpline.h"
-#include "glm/gtx/string_cast.hpp"
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/string_cast.hpp>
 #include <GLFW/glfw3.h>
 #include <cstdio>
 #include <glad/glad.h>
@@ -42,7 +43,10 @@ int main([[maybe_unused]] int argc, char *argv[]) {
   GLFWwindow *window;
 
   glfwInit();
-  gladLoadGL();
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
   glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
   window = glfwCreateWindow(width, height, "racanim", nullptr, nullptr);
@@ -54,6 +58,7 @@ int main([[maybe_unused]] int argc, char *argv[]) {
 
   glfwMakeContextCurrent(window);
 
+  gladLoadGL();
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     fprintf(stderr, "Failed to initialize GLAD");
     exit(1);

@@ -1,5 +1,4 @@
 #include "BSplineApproximateCurve.h"
-#include "glm/gtx/string_cast.hpp"
 #include <cmath>
 
 void BSplineApproximateCurve::updatePoints() {

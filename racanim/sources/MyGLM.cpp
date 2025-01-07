@@ -1,5 +1,4 @@
 #include "MyGLM.h"
-#include <glm/gtx/string_cast.hpp>
 
 glm::mat4 MyGLM::translate3D(glm::vec3 translateVector) {
   return {

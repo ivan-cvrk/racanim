@@ -1,7 +1,5 @@
 #include "Transform.h"
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include <cmath>
 
 Transform::Transform()
