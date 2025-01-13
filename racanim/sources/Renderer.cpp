@@ -4,8 +4,8 @@
 #include "Shader.h"
 #include <glm/gtc/matrix_transform.hpp>
 
-Renderer::Renderer(Camera &camera, Light &light, Shader* depthShader)
-    : light(light), camera(camera), depthShader(depthShader) {
+Renderer::Renderer(Camera &camera, Light &light)
+    : light(light), camera(camera) {
   glGenTextures(1, &depthMapTEX);
   glBindTexture(GL_TEXTURE_2D, depthMapTEX);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -39,12 +39,16 @@ void Renderer::render() {
   glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  depthShader->use();
-  glUniformMatrix4fv(glGetUniformLocation(depthShader->ID, "LightSpaceMatrix"),
-                  1, GL_FALSE, &lightSpace[0][0]);
   for (ISceneObject *object : objects) {
     Shader *shader = object->getShader();
+    Shader* depthShader = object->getDepthShader();
+    if (depthShader == nullptr) {
+      continue;
+    }
     object->setShader(depthShader);
+    depthShader->use();
+    glUniformMatrix4fv(glGetUniformLocation(depthShader->ID, "LightSpaceMatrix"),
+                    1, GL_FALSE, &lightSpace[0][0]);
     object->render(projectionMatrix, viewMatrix);
     object->setShader(shader);
   }
@@ -52,7 +56,6 @@ void Renderer::render() {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glViewport(0, 0, camera.getWidth(), camera.getHeight());
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  depthShader->use();
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, depthMapTEX);
 
@@ -77,4 +80,3 @@ void Renderer::update(float deltaTime) {
     sceneObject->update(deltaTime);
   }
 }
- 

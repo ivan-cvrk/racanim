@@ -45,7 +45,7 @@ void Lines::setPoints(const std::vector<glm::vec3> &points) {
   glBindVertexArray(0);
 }
 
-void Lines::draw() {
+void Lines::draw([[maybe_unused]] const Shader *shader) {
   if (this->pointsCount == 0) {
     return;
   }

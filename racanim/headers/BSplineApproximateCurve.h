@@ -25,9 +25,9 @@ public:
     curve.setColor(glm::ivec3(121, 0, 242));
   }
 
-  virtual void draw() override {
-    curvePolygon.draw();
-    curve.draw();
+  virtual void draw(const Shader* shader) override {
+    curvePolygon.draw(shader);
+    curve.draw(shader);
   }
 
   void showPoint(float t);

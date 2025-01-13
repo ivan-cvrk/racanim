@@ -18,10 +18,10 @@ public:
     bitangentLine.setColor(glm::vec3(0.f, 0.f, 1.f));
   }
   void setPoint(float t);
-  void draw() {
-    tangentLine.draw();
-    normalLine.draw();
-    bitangentLine.draw();
+  void draw(const Shader* shader) {
+    tangentLine.draw(shader);
+    normalLine.draw(shader);
+    bitangentLine.draw(shader);
   };
 
   inline glm::vec3 Position() { return position; }

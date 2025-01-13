@@ -15,5 +15,5 @@ public:
   void setColor(glm::vec3);
   void setColor(glm::ivec3);
   void setPoints(const std::vector<glm::vec3>& points);
-  virtual void draw() override;
+  virtual void draw(const Shader* shader) override;
 };

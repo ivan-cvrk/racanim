@@ -24,26 +24,51 @@ uniform vec3 MaterialSpecular;
 uniform sampler2D depth_texture;
 
 float CalculateShadow(vec4 fragPosLightSpace) {
-  float bias = 0.001;
-  vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
-  projCoords = projCoords * 0.5 + 0.5;
-  float closestDepth = texture(depth_texture, projCoords.xy).r + bias;
-  float currentDepth = projCoords.z;
+    // Calculate projection coordinates
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;
 
-  float shadow = currentDepth > closestDepth ? 1.0 : 0.0;
+    // Retrieve depth and bias
+    float bias = 0.005;
+    float closestDepth = texture(depth_texture, projCoords.xy).r + bias;
+    float currentDepth = projCoords.z;
 
-  vec2 texelSize = 1.0 / textureSize(depth_texture, 0);
-  for(int x = -1; x <= 1; ++x)
-  {
-      for(int y = -1; y <= 1; ++y)
-      {
-          float pcfDepth = texture(depth_texture, projCoords.xy + vec2(x, y) * texelSize).r; 
-          shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
-      }
-  }
-  shadow /= 9.0;
+    // If outside the shadow map, no shadow
+    if (projCoords.z > 1.0) 
+        return 0.0;
 
-  return shadow;
+    // Stronger distance-based kernel size
+    float distance = length(FragPos - LightPosition);
+    float kernelRadius = clamp(distance * distance * 0.3 - distance * 0.1, 2.0, 3.0); // Larger scaling factor for more blur
+    vec2 texelSize = kernelRadius / textureSize(depth_texture, 0);
+
+    // Percentage Closer Filtering (PCF)
+    float shadow = 0.0;
+    int samples = int(kernelRadius) * 2 + 1; // Increase the sample count dynamically
+    for (int x = -samples / 2; x <= samples / 2; ++x) {
+        for (int y = -samples / 2; y <= samples / 2; ++y) {
+            float pcfDepth = texture(depth_texture, projCoords.xy + vec2(x, y) * texelSize).r;
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;
+        }
+    }
+
+    // Normalize by the number of samples
+    shadow /= float(samples * samples);
+
+    //shadow = 0.0;
+    //totalWeight = 0.0;
+    //for (int x = -samples / 2; x <= samples / 2; ++x) {
+    //    for (int y = -samples / 2; y <= samples / 2; ++y) {
+    //        vec2 offset = vec2(x, y) * texelSize;
+    //        float weight = exp(-(x * x + y * y) / (2.0 * kernelRadius)); // Gaussian weight
+    //        float pcfDepth = texture(depth_texture, projCoords.xy + offset).r;
+    //        shadow += weight * (currentDepth - bias > pcfDepth ? 1.0 : 0.0);
+    //        totalWeight += weight;
+    //    }
+    //}
+    //shadow /= totalWeight; // Normalize by total weight
+
+    return shadow;
 }
 
 void main()
@@ -58,7 +83,7 @@ void main()
 
   float theta = dot(fragToLightDir, -LightDirection);
   float epsilon = LightCutoff - LightOuterCutoff;
-  float intensity = theta;//clamp((theta - LightOuterCutoff) / epsilon, 0.0, 1.0);
+  float intensity = clamp((theta - LightOuterCutoff) / epsilon, 0.0, 1.0);
 
   vec3 camDir = normalize(CameraPosition - FragPos);
 

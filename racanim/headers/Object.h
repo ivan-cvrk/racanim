@@ -11,6 +11,7 @@ class Shader;
 
 class Object : public ISceneObject {
   Shader *shader = nullptr;
+  Shader *depthShader = nullptr;
   Material material;
   std::vector<IRenderable *> renderables;
 
@@ -28,6 +29,11 @@ public:
 
   void setShader(Shader *shader) override {
     this->shader = shader;
+  }
+
+  Shader* getDepthShader() override { return this->depthShader; }
+  void setDepthShader(Shader *shader) override {
+    this->depthShader = shader;
   }
 
   void setMaterial(Material material) {

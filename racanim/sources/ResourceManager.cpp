@@ -65,6 +65,29 @@ Material ResourceManager::loadMaterial(const char *sceneDir, const aiMaterial* m
   return material;
 }
 
+Material ResourceManager::getMaterial(const char* name, unsigned int materialID) {
+  fs::path executable_path = fs::canonical(fs::path(execpath));
+  fs::path directory = executable_path.parent_path() / "resources";
+  fs::path resource = directory / name;
+
+  Assimp::Importer importer;
+  const aiScene *scene = importer.ReadFile(resource.c_str(),
+    aiProcess_CalcTangentSpace |
+    aiProcess_Triangulate |
+    aiProcess_JoinIdenticalVertices |
+    aiProcess_SortByPType |
+    aiProcess_GenSmoothNormals |
+    aiProcess_FlipUVs
+  );
+
+
+  if (scene->mNumMaterials > materialID) {
+    return loadMaterial(resource.parent_path().c_str(), scene->mMaterials[materialID]);
+  } else {
+    return Material{{0.3, 0.3, 0.3,}, {1.0, 1.0, 1.0}, {1.0, 1.0, 1.0}, 32.0f};
+  }
+}
+
 Object *ResourceManager::getScene(const char *name) {
   // if already loaded
   auto objIter = this->objects.find(name);
@@ -115,9 +138,7 @@ Shader *ResourceManager::getShader(const char *name, const char *vertName, const
   fs::path directory = executable_path.parent_path();
 
   fs::path vertexFile = directory / "shaders" / vertName;
-  fs::path fragmentFile = directory / "shaders" / fragName;
-
-  Shader* shader = nullptr;
+  fs::path fragmentFile = directory / "shaders" / fragName; Shader* shader = nullptr;
   if (geomName == nullptr) {
     shader = new Shader(vertexFile.c_str(), fragmentFile.c_str(), nullptr);
   } else {

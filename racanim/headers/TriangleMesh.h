@@ -24,5 +24,5 @@ public:
   std::pair<glm::vec3, glm::vec3> getBoundingBox();
   void normalize();
 
-  virtual void draw() override;
+  virtual void draw(const Shader* shader) override;
 };

@@ -30,7 +30,7 @@ void Object::render(const glm::mat4 &projectionMatrix, const glm::mat4 &view, co
   }
 
   for (auto renderable : renderables) {
-    renderable->draw();
+    renderable->draw(shader);
   }
 }
 

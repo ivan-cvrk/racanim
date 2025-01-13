@@ -113,7 +113,7 @@ void TriangleMesh::normalize() {
   std::cout << "max coords = " << maxmin2.second.x << " " << maxmin2.second.y << " " << maxmin2.second.z << std::endl;
 }
 
-void TriangleMesh::draw() {
+void TriangleMesh::draw([[maybe_unused]]const Shader* shader) {
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);

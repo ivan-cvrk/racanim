@@ -20,6 +20,7 @@ private:
 public:
   ResourceManager(const char *execpath);
 
+  Material getMaterial(const char* name, unsigned int materialID);
   Object* getScene(const char *name);
   Shader* getShader(const char *name, const char *vertName, const char *fragName, const char *geomName = nullptr);
 

@@ -94,7 +94,7 @@ public:
                  &cloth->vertices[0].x, GL_DYNAMIC_DRAW);
   }
 
-  virtual void draw() override {
+  virtual void draw([[maybe_unused]]const Shader* shader) override {
     if (points) {
       glPointSize(5);
       glBindVertexArray(pointsVAO);

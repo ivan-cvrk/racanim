@@ -4,7 +4,6 @@
 #include <unordered_set>
 #include "Camera.h"
 #include "Light.h"
-#include "Shader.h"
 
 class ISceneObject;
 
@@ -13,14 +12,13 @@ class Renderer {
   Light& light;
   Camera& camera;
 
-  const GLuint SHADOW_WIDTH = 1024;
-  const GLuint SHADOW_HEIGHT = 1024;
+  const GLuint SHADOW_WIDTH = 2048;
+  const GLuint SHADOW_HEIGHT = 2048;
   GLuint depthMapFBO;
   GLuint depthMapTEX;
-  Shader *depthShader;
 
 public:
-  Renderer(Camera& camera, Light& light, Shader *septhShader);
+  Renderer(Camera& camera, Light& light);
   ~Renderer() {}
   void registerObject(ISceneObject * object) {
     this->objects.insert(object);

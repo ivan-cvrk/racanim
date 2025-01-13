@@ -21,10 +21,10 @@ public:
     interpolatedCurve.setColor(glm::vec3{0.1f, 8.0f, 0.1f});
   }
 
-  virtual void draw() override {
-    polygonCurve.draw();
-    approximatedCurve.draw();
-    interpolatedCurve.draw();
+  virtual void draw(const Shader* shader) override {
+    polygonCurve.draw(shader);
+    approximatedCurve.draw(shader);
+    interpolatedCurve.draw(shader);
   }
 
   void addPoint(glm::vec3 point);
