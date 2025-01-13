@@ -196,7 +196,7 @@ void AnimatedModel::loadAnimation(const aiScene *scene) {
   else
     animation.ticksPerSecond = 1;
 
-  animation.duration = anim->mDuration * anim->mTicksPerSecond;
+  animation.duration = anim->mDuration * 1.0 / anim->mTicksPerSecond;
   animation.boneTransforms = {};
 
   // load positions rotations and scales for each bone
@@ -206,17 +206,17 @@ void AnimatedModel::loadAnimation(const aiScene *scene) {
     BoneTransformTrack track;
 
     for (unsigned int j = 0; j < channel->mNumPositionKeys; j++) {
-      track.positionTimeStamps.push_back(channel->mPositionKeys[j].mTime);
+      track.positionTimeStamps.push_back(channel->mPositionKeys[j].mTime / animation.ticksPerSecond);
       track.positions.push_back(
           AssimpToGlmVec3(channel->mPositionKeys[j].mValue));
     }
     for (unsigned int j = 0; j < channel->mNumRotationKeys; j++) {
-      track.rotationTimeStamps.push_back(channel->mRotationKeys[j].mTime);
+      track.rotationTimeStamps.push_back(channel->mRotationKeys[j].mTime / animation.ticksPerSecond);
       track.rotations.push_back(
           AssimpToGlmQuat(channel->mRotationKeys[j].mValue));
     }
     for (unsigned int j = 0; j < channel->mNumScalingKeys; j++) {
-      track.scaleTimeStamps.push_back(channel->mScalingKeys[j].mTime);
+      track.scaleTimeStamps.push_back(channel->mScalingKeys[j].mTime / animation.ticksPerSecond);
       track.scales.push_back(AssimpToGlmVec3(channel->mScalingKeys[j].mValue));
     }
     animation.boneTransforms[channel->mNodeName.C_Str()] = track;
@@ -327,10 +327,7 @@ void AnimatedModel::getPose(Bone &bone, const glm::mat4 &parentTransform,
 }
 
 void AnimatedModel::update(float elapsedTime) {
-  totalElapsedTime += (elapsedTime * 500);
-  if (totalElapsedTime > 833.333) {
-    totalElapsedTime -= 833.333;
-  }
+  totalElapsedTime += elapsedTime;
   getPose(skeleton, glm::mat4(1.0f), totalElapsedTime);
 }
 
