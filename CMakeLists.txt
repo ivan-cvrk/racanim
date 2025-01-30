@@ -13,6 +13,12 @@ option(ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF)
 option(ASSIMP_BUILD_ALL_EXPORTERS_BY_DEFAULT OFF)
 set(ASSIMP_BUILD_OBJ_EXPORTER TRUE)
 set(ASSIMP_BUILD_OBJ_IMPORTER TRUE)
+set(ASSIMP_BUILD_COLLADA_IMPORTER TRUE)
 add_subdirectory(dependencies/assimp)
 
-add_subdirectory(racanim)
+cmake_minimum_required(VERSION 3.10)
+project(racanim)
+
+add_subdirectory(lab1)
+add_subdirectory(lab2)
+add_subdirectory(lab3)

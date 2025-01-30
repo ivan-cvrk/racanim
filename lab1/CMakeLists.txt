@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(racanim)
+project(lab1)
 
 # Compiler flags based on platform
 if(MSVC)
@@ -55,16 +55,16 @@ set(DUMMY_SHADERS_OUTPUT_FILE ${CMAKE_BINARY_DIR}/shaders/copied_marker.txt)
 # Add custom command to copy the shaders to the target directory
 add_custom_command(
     OUTPUT ${DUMMY_SHADERS_OUTPUT_FILE}  # Dummy output file to track the command
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/racanim/shaders
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/shaders ${CMAKE_BINARY_DIR}/lab1/shaders
     DEPENDS ${PROJECT_SHADERS}  # List of all shader files
     COMMENT "Copying shaders to target directory"
 )
 
 # Create a custom target for copying shaders
-add_custom_target(copy_shaders ALL DEPENDS ${DUMMY_SHADERS_OUTPUT_FILE})
+add_custom_target(copy_shaders_lab1 ALL DEPENDS ${DUMMY_SHADERS_OUTPUT_FILE})
 
 # Ensure that the shaders are copied when the main project is built
-add_dependencies(${PROJECT_NAME} copy_shaders)
+add_dependencies(${PROJECT_NAME} copy_shaders_lab1)
 
 # Define a dummy file that will be used as the output of the copy command
 set(DUMMY_RESOURCES_OUTPUT_FILE ${CMAKE_BINARY_DIR}/resources/copied_marker.txt)
@@ -72,13 +72,13 @@ set(DUMMY_RESOURCES_OUTPUT_FILE ${CMAKE_BINARY_DIR}/resources/copied_marker.txt)
 # Add custom command to copy the resrources to the target directory
 add_custom_command(
     OUTPUT ${DUMMY_RESOURCES_OUTPUT_FILE}  # Dummy output file to track the command
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/racanim/resources
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/resources ${CMAKE_BINARY_DIR}/lab1/resources
     DEPENDS ${PROJECT_SHADERS}  # List of all shader files
     COMMENT "Copying resources to target directory"
 )
 
 # Create a custom target for copying shaders
-add_custom_target(copy_resources ALL DEPENDS ${DUMMY_RESOURCES_OUTPUT_FILE})
+add_custom_target(copy_resources_lab1 ALL DEPENDS ${DUMMY_RESOURCES_OUTPUT_FILE})
 
 # Ensure that the resources are copied when the main project is built
-add_dependencies(${PROJECT_NAME} copy_resources)
+add_dependencies(${PROJECT_NAME} copy_resources_lab1)
